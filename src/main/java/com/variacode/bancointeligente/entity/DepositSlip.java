@@ -11,7 +11,7 @@ public class DepositSlip {
     private String fromPhone;
     private String toName;
     private String toAccount;
-    private String amount;
+    private Double amount;
     private String type;
     private String status;
 
@@ -55,11 +55,11 @@ public class DepositSlip {
         this.toAccount = toAccount;
     }
 
-    public String getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

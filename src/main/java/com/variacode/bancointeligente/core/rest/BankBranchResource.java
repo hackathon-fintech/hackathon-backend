@@ -1,5 +1,6 @@
 package com.variacode.bancointeligente.core.rest;
 
+import com.variacode.bancointeligente.entity.DepositSlip;
 import com.variacode.bancointeligente.entity.UserAccount;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -27,7 +28,7 @@ public class BankBranchResource extends AbstractResource {
     }
 
     @GET
-    @Path("/users")
+    @Path("/user")
     @Produces("application/json")
     @ApiOperation(value = "usuarios en una sucursal con una accion especifica",
             notes = "",
@@ -59,11 +60,12 @@ public class BankBranchResource extends AbstractResource {
     }
 
     @GET
-    @Path("/teller/deposit")
+    @Path("/user/deposit")
     @Produces("application/json")
     @ApiOperation(value = "trae depositos de un cliente",
             notes = "",
-            response = UserAccount.class)
+            response = DepositSlip.class,
+            responseContainer = "List")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
@@ -73,30 +75,48 @@ public class BankBranchResource extends AbstractResource {
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        UserAccount userAccount = new UserAccount();
-        userAccount.setFirstName("Miguel");
-        userAccount.setPremium(true);
-        userAccount.setRut("1-9");
-        userAccount.setSpecialAssistance(true);
-        return Response.ok(userAccount).build();
+        DepositSlip depositSlip = new DepositSlip();
+        depositSlip.setAmount(100.0);
+        depositSlip.setDepositId(1L);
+        depositSlip.setFromName("sdf");
+        depositSlip.setFromPhone("345345");
+        depositSlip.setStatus("NEW");
+        depositSlip.setToAccount("23452345345");
+        depositSlip.setToName("asdf");
+        depositSlip.setType("CHECK");
+        DepositSlip depositSlip2 = new DepositSlip();
+        depositSlip2.setAmount(100.0);
+        depositSlip2.setDepositId(1L);
+        depositSlip2.setFromName("sdf");
+        depositSlip2.setFromPhone("345345");
+        depositSlip2.setStatus("NEW");
+        depositSlip2.setToAccount("23452345345");
+        depositSlip2.setToName("asdf");
+        depositSlip2.setType("CHECK");
+        List<DepositSlip> depositSlipList = new ArrayList<>();
+        depositSlipList.add(depositSlip);
+        depositSlipList.add(depositSlip2);
+        return Response.ok(depositSlipList).build();
     }
 
     @PUT
+    @Path("/user/deposit")
     @Produces("application/json")
-    @ApiOperation(value = "modifica informacion del cliente, excepto rut",
-            notes = "branchCode se puede poner si es null (ninguna) o MONEDA, branchStatus= null o vacio, NEAR, INSIDE, GOING",
-            response = UserAccount.class)
+    @ApiOperation(value = "cliente o ejecutivo graba o modifica un deposito",
+            notes = "status=NEW,IGNORE,DONE "
+            + "type=CHECK,CASH",
+            response = DepositSlip.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
-    public Response putJson(UserAccount userAccount) {
+    public Response putJson(@HeaderParam("rut") String rut, DepositSlip depositSlip) {
         try {
-            checkNullsOrEmptyString(userAccount);
-            checkNullsOrEmptyString(userAccount.getFirstName(), userAccount.getRut());
+            checkNullsOrEmptyString(depositSlip, rut);
+            checkNullsOrEmptyString(depositSlip.getAmount(), depositSlip.getToAccount());
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        return Response.ok(userAccount).build();
+        return Response.ok(depositSlip).build();
     }
 
 }
