@@ -1,12 +1,13 @@
 package com.variacode.bancointeligente.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author miguel@variacode.com
  */
-public class DepositSlip {
+public class DepositSlip implements Serializable {
 
     private Long depositId;
     private String fromName;
@@ -16,7 +17,7 @@ public class DepositSlip {
     private String status;
     private List<DepositSlipDetail> detail;
 
-    public static class DepositSlipDetail{
+    public static class DepositSlipDetail implements Serializable {
         private String type;
         private Double amount;
 

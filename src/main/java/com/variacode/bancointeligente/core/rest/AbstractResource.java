@@ -10,6 +10,18 @@ import javax.ws.rs.core.Response;
  */
 public class AbstractResource {
     
+    public void checkAction(String action) throws BancoInteligenteRESTException{
+        if(action == null){
+            return;
+        }
+        if(!action.toUpperCase().equals("TELLER") &&
+                !action.isEmpty() &&
+                !action.toUpperCase().equals("INFORMATION") &&
+                !action.toUpperCase().equals("EXECUTIVE")){
+            throw new BancoInteligenteRESTException(Response.Status.BAD_REQUEST);
+        }
+    }
+    
     public void checkNulls(Object... objs) throws BancoInteligenteRESTException {
         for (Object o : objs) {
             if (o == null) {

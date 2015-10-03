@@ -1,8 +1,8 @@
 package com.variacode.bancointeligente.core.rest;
 
-import com.variacode.bancointeligente.controller.BusinessLogicBean;
 import com.variacode.bancointeligente.controller.BusinessLogicBeanLocal;
 import com.variacode.bancointeligente.entity.UserAccount;
+import com.variacode.bancointeligente.storage.StorageBeanLocal;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -30,6 +30,9 @@ public class UserAccountResource extends AbstractResource {
 
     @EJB
     private BusinessLogicBeanLocal businessLogicBean;
+    
+    @EJB
+    private StorageBeanLocal storage;
 
     public UserAccountResource() {
     }
@@ -48,12 +51,11 @@ public class UserAccountResource extends AbstractResource {
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        UserAccount userAccount = new UserAccount();
-        userAccount.setFirstName("Miguel");
-        userAccount.setPremium(true);
-        userAccount.setRut("1-9");
-        userAccount.setPhotoURL("http://mundoejecutivo.com.mx/sites/default/files/styles/large/public/cliente_1.jpg");
-        userAccount.setSpecialAssistance(true);
+        //TODO: login
+        UserAccount userAccount = storage.get(UserAccount.class, rut);
+        if(userAccount == null){
+            return responseWithBodyAndLog(Status.BAD_REQUEST, "User doesn't exist");
+        }
         return Response.ok(userAccount).build();
     }
 
@@ -70,10 +72,13 @@ public class UserAccountResource extends AbstractResource {
     public Response putJson(UserAccount userAccount) {
         try {
             checkNullsOrEmptyString(userAccount);
-            checkNullsOrEmptyString(userAccount.getFirstName(), userAccount.getRut());
+            checkNullsOrEmptyString(userAccount.getRut());
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
+        //TODO: login
+        //TODO: autoriacion
+        storage.put(UserAccount.class, userAccount.getRut(), userAccount);
         return Response.ok(userAccount).build();
     }
 

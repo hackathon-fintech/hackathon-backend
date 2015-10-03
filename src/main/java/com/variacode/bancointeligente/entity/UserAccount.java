@@ -1,7 +1,9 @@
 
 package com.variacode.bancointeligente.entity;
 
-public class UserAccount {
+import java.io.Serializable;
+
+public class UserAccount implements Serializable {
 
     private String rut;
     private String firstName;
