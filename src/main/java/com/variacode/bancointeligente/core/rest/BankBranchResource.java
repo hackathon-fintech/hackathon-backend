@@ -41,7 +41,7 @@ public class BankBranchResource extends AbstractResource {
         @ApiResponse(code = 400, message = "Invalid something")})
     public Response getJsonAll(@QueryParam("branchName") String branchName, @QueryParam("action") String action) {
         try {
-            checkNullsOrEmptyString(branchName, action);
+            checkNullsOrEmptyString(branchName);
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }

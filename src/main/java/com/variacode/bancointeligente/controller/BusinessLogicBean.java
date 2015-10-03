@@ -14,7 +14,6 @@ import javax.ejb.Stateless;
 public class BusinessLogicBean implements BusinessLogicBeanLocal {
 
     public BusinessLogicBean(){
-        
     }
     
     @EJB
