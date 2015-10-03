@@ -13,6 +13,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 /**
@@ -20,7 +21,7 @@ import javax.ws.rs.core.Response;
  *
  * @author miguel@variacode.com
  */
-@Path("brach")
+@Path("branch")
 @Api(value = "/branch", description = "Sucursal API")
 public class BankBranchResource extends AbstractResource {
 
@@ -37,7 +38,7 @@ public class BankBranchResource extends AbstractResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
-    public Response getJsonAll(@HeaderParam("branchName") String branchName, @HeaderParam("action") String action) {
+    public Response getJsonAll(@QueryParam("branchName") String branchName, @QueryParam("action") String action) {
         try {
             checkNullsOrEmptyString(branchName, action);
         } catch (BancoInteligenteRESTException ex) {
