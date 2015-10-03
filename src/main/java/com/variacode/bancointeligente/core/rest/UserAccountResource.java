@@ -1,10 +1,14 @@
 package com.variacode.bancointeligente.core.rest;
 
+import com.variacode.bancointeligente.controller.BusinessLogicBean;
+import com.variacode.bancointeligente.controller.BusinessLogicBeanLocal;
 import com.variacode.bancointeligente.entity.UserAccount;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -12,15 +16,20 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 /**
  * REST Web Service
  *
  * @author miguel@variacode.com
  */
+@Stateless
 @Path("user")
 @Api(value = "/user", description = "Usuario API")
 public class UserAccountResource extends AbstractResource {
+
+    @EJB
+    private BusinessLogicBeanLocal businessLogicBean;
 
     public UserAccountResource() {
     }
@@ -77,13 +86,17 @@ public class UserAccountResource extends AbstractResource {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
     public Response login(@HeaderParam("rut") String rut, @HeaderParam("pin") String pin) {
+        String token;
         try {
-            checkNullsOrEmptyString(rut,pin);
+            checkNullsOrEmptyString(rut, pin);
+            token = businessLogicBean.login(rut, pin);
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        //TODO: TOKEN
-        return Response.ok("TOKEN").build();
+        if (token == null) {
+            return responseWithBodyAndLog(Status.INTERNAL_SERVER_ERROR, "Login error");
+        }
+        return Response.ok(token).build();
     }
 
 }

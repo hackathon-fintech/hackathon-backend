@@ -32,7 +32,8 @@ public class BankBranchResource extends AbstractResource {
     @Path("/user")
     @Produces("application/json")
     @ApiOperation(value = "usuarios en una sucursal con una accion especifica",
-            notes = "",
+            notes = "branchName=MONEDA, "
+                    + "action=TELLER,INFORMATION,EXECUTIVE",
             response = UserAccount.class,
             responseContainer = "List")
     @ApiResponses(value = {

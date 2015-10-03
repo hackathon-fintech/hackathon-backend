@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
  * @author miguel@variacode.com
  */
 public class AbstractResource {
-
+    
     public void checkNulls(Object... objs) throws BancoInteligenteRESTException {
         for (Object o : objs) {
             if (o == null) {
@@ -30,7 +30,7 @@ public class AbstractResource {
     }
 
     public Response responseWithBodyAndLog(Response.Status status, String log) {
-        Logger.getLogger(AbstractResource.class.getName()).log(Level.FINE, log);
+        Logger.getLogger(AbstractResource.class.getName()).log(Level.INFO, log);
         return Response.status(status).type("text/plain").entity(log).build();
     }
 
