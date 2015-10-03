@@ -8,6 +8,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.Response;
@@ -51,8 +52,8 @@ public class UserAccountResource extends AbstractResource {
     @Produces("application/json")
     @ApiOperation(value = "modifica informacion del cliente, excepto rut",
             notes = "branchCode se puede poner si es null (ninguna) o MONEDA, "
-                    + "branchStatus= null o vacio, NEAR, INSIDE, GOING, "
-                    + "action=TELLER,INFORMATION,EXECUTIVE",
+            + "branchStatus= null o vacio, NEAR, INSIDE, GOING, "
+            + "action=TELLER,INFORMATION,EXECUTIVE",
             response = UserAccount.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -65,6 +66,24 @@ public class UserAccountResource extends AbstractResource {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
         return Response.ok(userAccount).build();
+    }
+
+    @POST
+    @Produces("text/plain")
+    @ApiOperation(value = "login",
+            notes = "login pide rut y pin de 5 digitos",
+            response = String.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 400, message = "Invalid something")})
+    public Response login(@HeaderParam("rut") String rut, @HeaderParam("pin") String pin) {
+        try {
+            checkNullsOrEmptyString(rut,pin);
+        } catch (BancoInteligenteRESTException ex) {
+            return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
+        }
+        //TODO: TOKEN
+        return Response.ok("TOKEN").build();
     }
 
 }
