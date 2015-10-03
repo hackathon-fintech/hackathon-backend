@@ -50,7 +50,7 @@ public class UserAccountResource extends AbstractResource {
     @PUT
     @Produces("application/json")
     @ApiOperation(value = "modifica informacion del cliente, excepto rut",
-            notes = "",
+            notes = "branchCode se puede poner si es null (ninguna) o MONEDA, branchStatus= null o vacio, NEAR, INSIDE, GOING",
             response = UserAccount.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

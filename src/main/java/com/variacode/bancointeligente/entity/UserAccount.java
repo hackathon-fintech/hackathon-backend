@@ -7,6 +7,8 @@ public class UserAccount {
     private String firstName;
     private boolean specialAssistance;
     private boolean premium;
+    private String branchCode;
+    private String branchStatus;
 
     public String getRut() {
         return rut;
@@ -38,6 +40,22 @@ public class UserAccount {
 
     public void setPremium(boolean premium) {
         this.premium = premium;
+    }
+
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
+    }
+
+    public String getBranchStatus() {
+        return branchStatus;
+    }
+
+    public void setBranchStatus(String branchStatus) {
+        this.branchStatus = branchStatus;
     }
     
 }
