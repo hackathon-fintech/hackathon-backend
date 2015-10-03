@@ -47,11 +47,13 @@ public class BankBranchResource extends AbstractResource {
         userAccount.setFirstName("Roi");
         userAccount.setPremium(true);
         userAccount.setRut("1-9");
+        userAccount.setPhotoURL("http://mundoejecutivo.com.mx/sites/default/files/styles/large/public/cliente_1.jpg");
         userAccount.setSpecialAssistance(true);
         UserAccount userAccount2 = new UserAccount();
         userAccount2.setFirstName("Gus");
         userAccount2.setPremium(true);
         userAccount2.setRut("1-9");
+        userAccount2.setPhotoURL("http://mundoejecutivo.com.mx/sites/default/files/styles/large/public/cliente_1.jpg");
         userAccount2.setSpecialAssistance(false);
         List<UserAccount> userAccountList = new ArrayList<>();
         userAccountList.add(userAccount);
