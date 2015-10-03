@@ -112,7 +112,6 @@ public class BankBranchResource extends AbstractResource {
     public Response putJson(@HeaderParam("rut") String rut, DepositSlip depositSlip) {
         try {
             checkNullsOrEmptyString(depositSlip, rut);
-            checkNullsOrEmptyString(depositSlip.getAmount(), depositSlip.getToAccount());
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }

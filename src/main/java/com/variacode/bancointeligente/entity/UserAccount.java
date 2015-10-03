@@ -10,6 +10,7 @@ public class UserAccount {
     private String branchCode;
     private String branchStatus;
     private String action;
+    private String photoURL;
 
     public String getRut() {
         return rut;
@@ -65,6 +66,14 @@ public class UserAccount {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
     
 }

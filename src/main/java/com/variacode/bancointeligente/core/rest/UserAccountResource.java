@@ -42,6 +42,7 @@ public class UserAccountResource extends AbstractResource {
         userAccount.setFirstName("Miguel");
         userAccount.setPremium(true);
         userAccount.setRut("1-9");
+        userAccount.setPhotoURL("http://mundoejecutivo.com.mx/sites/default/files/styles/large/public/cliente_1.jpg");
         userAccount.setSpecialAssistance(true);
         return Response.ok(userAccount).build();
     }
