@@ -5,6 +5,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -17,16 +19,49 @@ import javax.ws.rs.core.Response;
  *
  * @author miguel@variacode.com
  */
-@Path("user")
-@Api(value = "/user", description = "Usuario API")
-public class UserAccountResource extends AbstractResource {
+@Path("brach")
+@Api(value = "/branch", description = "Sucursal API")
+public class BankBranchResource extends AbstractResource {
 
-    public UserAccountResource() {
+    public BankBranchResource() {
     }
 
     @GET
+    @Path("/users")
     @Produces("application/json")
-    @ApiOperation(value = "trae información de cliente",
+    @ApiOperation(value = "usuarios en una sucursal con una accion especifica",
+            notes = "",
+            response = UserAccount.class,
+            responseContainer = "List")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 400, message = "Invalid something")})
+    public Response getJsonAll(@HeaderParam("branchName") String branchName, @HeaderParam("action") String action) {
+        try {
+            checkNullsOrEmptyString(branchName, action);
+        } catch (BancoInteligenteRESTException ex) {
+            return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
+        }
+        UserAccount userAccount = new UserAccount();
+        userAccount.setFirstName("Roi");
+        userAccount.setPremium(true);
+        userAccount.setRut("1-9");
+        userAccount.setSpecialAssistance(true);
+        UserAccount userAccount2 = new UserAccount();
+        userAccount2.setFirstName("Gus");
+        userAccount2.setPremium(true);
+        userAccount2.setRut("1-9");
+        userAccount2.setSpecialAssistance(false);
+        List<UserAccount> userAccountList = new ArrayList<>();
+        userAccountList.add(userAccount);
+        userAccountList.add(userAccount2);
+        return Response.ok(userAccountList).build();
+    }
+
+    @GET
+    @Path("/teller/deposit")
+    @Produces("application/json")
+    @ApiOperation(value = "trae depositos de un cliente",
             notes = "",
             response = UserAccount.class)
     @ApiResponses(value = {
@@ -49,9 +84,7 @@ public class UserAccountResource extends AbstractResource {
     @PUT
     @Produces("application/json")
     @ApiOperation(value = "modifica informacion del cliente, excepto rut",
-            notes = "branchCode se puede poner si es null (ninguna) o MONEDA, "
-                    + "branchStatus= null o vacio, NEAR, INSIDE, GOING, "
-                    + "action=TELLER,INFORMATION,EXECUTIVE",
+            notes = "branchCode se puede poner si es null (ninguna) o MONEDA, branchStatus= null o vacio, NEAR, INSIDE, GOING",
             response = UserAccount.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

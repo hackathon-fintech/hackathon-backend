@@ -9,6 +9,7 @@ public class UserAccount {
     private boolean premium;
     private String branchCode;
     private String branchStatus;
+    private String action;
 
     public String getRut() {
         return rut;
@@ -56,6 +57,14 @@ public class UserAccount {
 
     public void setBranchStatus(String branchStatus) {
         this.branchStatus = branchStatus;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
     
 }
