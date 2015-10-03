@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.variacode.bancointeligente.bl;
+package com.variacode.bancointeligente.controller;
 
-import com.variacode.bancointeligente.bo.Usuario;
+import com.variacode.bancointeligente.entity.UserAccount;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author miguel
  */
 @Stateless
-public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
+public class UsuarioFacade extends AbstractFacade<UserAccount> implements UsuarioFacadeLocal {
     @PersistenceContext(unitName = "com.variacode.bancointeligente.core_banco-inteligente_war_0.1-SNAPSHOTPU")
     private EntityManager em;
 
@@ -26,7 +26,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     public UsuarioFacade() {
-        super(Usuario.class);
+        super(UserAccount.class);
     }
     
 }

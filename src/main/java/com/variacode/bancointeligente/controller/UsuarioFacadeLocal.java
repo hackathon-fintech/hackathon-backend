@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.variacode.bancointeligente.bl;
+package com.variacode.bancointeligente.controller;
 
-import com.variacode.bancointeligente.bo.Usuario;
+import com.variacode.bancointeligente.entity.UserAccount;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -16,17 +16,17 @@ import javax.ejb.Local;
 @Local
 public interface UsuarioFacadeLocal {
 
-    void create(Usuario usuario);
+    void create(UserAccount usuario);
 
-    void edit(Usuario usuario);
+    void edit(UserAccount usuario);
 
-    void remove(Usuario usuario);
+    void remove(UserAccount usuario);
 
-    Usuario find(Object id);
+    UserAccount find(Object id);
 
-    List<Usuario> findAll();
+    List<UserAccount> findAll();
 
-    List<Usuario> findRange(int[] range);
+    List<UserAccount> findRange(int[] range);
 
     int count();
     

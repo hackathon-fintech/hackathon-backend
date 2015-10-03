@@ -1,18 +1,18 @@
-package com.variacode.bancointeligente.core.rest;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.variacode.bancointeligente.controller;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 /**
  *
  * @author miguel
  */
 public abstract class AbstractFacade<T> {
-
     private Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
@@ -59,14 +59,5 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-
-    public void checkNulls(Object... objs) {
-        for (Object o : objs) {
-            if (o == null) {
-                Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, "Objeto " + o.getClass().getName() + " no debería ser nulo", new WebApplicationException(Response.Status.BAD_REQUEST));
-                throw new WebApplicationException(Response.Status.BAD_REQUEST);
-            }
-        }
-    }
-
+    
 }
