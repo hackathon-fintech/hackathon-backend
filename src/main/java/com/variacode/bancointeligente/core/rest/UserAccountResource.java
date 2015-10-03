@@ -3,13 +3,9 @@ package com.variacode.bancointeligente.core.rest;
 import com.variacode.bancointeligente.entity.UserAccount;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
@@ -34,18 +30,39 @@ public class UserAccountResource extends AbstractResource {
             notes = "",
             response = UserAccount.class)//,
     //responseContainer = "List")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 400, message = "Invalid something")})
     public Response getJson(@HeaderParam("rut") String rut) {
         try {
             checkNullsOrEmptyString(rut);
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        UserAccount ua = new UserAccount();
-        ua.setFirstName("Miguel");
-        ua.setPremium(true);
-        ua.setRut("1-9");
-        ua.setSpecialAssistance(true);
-        return Response.ok(Collections.singletonList(ua)).build();
+        UserAccount userAccount = new UserAccount();
+        userAccount.setFirstName("Miguel");
+        userAccount.setPremium(true);
+        userAccount.setRut("1-9");
+        userAccount.setSpecialAssistance(true);
+        return Response.ok(userAccount).build();
+    }
+
+    @PUT
+    @Produces("application/json")
+    @ApiOperation(value = "modifica informacion del cliente, excepto rut",
+            notes = "",
+            response = UserAccount.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 400, message = "Invalid something")})
+    public Response putJson(UserAccount userAccount) {
+        try {
+            checkNullsOrEmptyString(userAccount);
+            checkNullsOrEmptyString(userAccount.getFirstName(), userAccount.getRut());
+        } catch (BancoInteligenteRESTException ex) {
+            return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
+        }
+        return Response.ok(userAccount).build();
     }
 
 }
