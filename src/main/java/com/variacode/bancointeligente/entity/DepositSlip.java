@@ -1,5 +1,7 @@
 package com.variacode.bancointeligente.entity;
 
+import java.util.List;
+
 /**
  *
  * @author miguel@variacode.com
@@ -11,10 +13,31 @@ public class DepositSlip {
     private String fromPhone;
     private String toName;
     private String toAccount;
-    private Double amount;
-    private String type;
     private String status;
+    private List<DepositSlipDetail> detail;
 
+    public static class DepositSlipDetail{
+        private String type;
+        private Double amount;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public Double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(Double amount) {
+            this.amount = amount;
+        }
+        
+    }
+    
     public Long getDepositId() {
         return depositId;
     }
@@ -55,28 +78,20 @@ public class DepositSlip {
         this.toAccount = toAccount;
     }
 
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<DepositSlipDetail> getDetail() {
+        return detail;
+    }
+
+    public void setDetail(List<DepositSlipDetail> detail) {
+        this.detail = detail;
     }
 
 }
