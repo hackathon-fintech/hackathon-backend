@@ -66,10 +66,10 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
             if (l.getBody() == null) {
                 throw new BancoInteligenteRESTException(Response.Status.UNAUTHORIZED);
             }
-            if(user != null && user.getPhone() == null){
-                user.setPhone(l.getBody().getContacto().getCelular() != null ? l.getBody().getContacto().getCelular() : l.getBody().getContacto().getTelefono());
+            if (user != null && user.getPhone() == null) {
+                user.setPhone(l.getBody().getContacto().getCelular() != null ? l.getBody().getContacto().getCelular() : (l.getBody().getContacto().getTelefono() == null ? "87541712" : l.getBody().getContacto().getTelefono()));
             }
-            if(user != null && user.getLastName() == null){
+            if (user != null && user.getLastName() == null) {
                 user.setLastName(l.getBody().getApellidoPaterno());
             }
             if (user == null || user.getToken() == null) {
@@ -124,7 +124,7 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
         List<UserAccount> ua = new ArrayList<>();
         Collection<UserAccount> c = storage.getAll(UserAccount.class);
         for (UserAccount a : c) {
-            if ((a.getBranchCode() != null && a.getBranchCode().equals(branch)) 
+            if ((a.getBranchCode() != null && a.getBranchCode().equals(branch))
                     && (action == null || action.equals(a.getAction()))
                     && !depositSlipGet(a.getRut()).isEmpty()) {
                 ua.add(a);
