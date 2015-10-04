@@ -106,11 +106,13 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
 
     @Override
     public List<DepositSlip> depositSlipGet(String rut) {
-        //TODO: mejorar :)
         List<DepositSlip> ds = new ArrayList<>();
         Collection<DepositSlip> c = storage.getAll(DepositSlip.class);
         for (DepositSlip d : c) {
-            if (d.getUserRut().equals(rut)) {
+            if (d.getUserRut().equals(rut)
+                    && d.getStatus() != null
+                    && d.getStatus().equals("NEW")
+                    && d.getStatus().equals("DONE")) {
                 ds.add(d);
             }
         }
@@ -119,11 +121,12 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
 
     @Override
     public List<UserAccount> userAccountGet(String branch, String action) {
-        //TODO: mejorar :)
         List<UserAccount> ua = new ArrayList<>();
         Collection<UserAccount> c = storage.getAll(UserAccount.class);
         for (UserAccount a : c) {
-            if ((a.getBranchCode() != null && a.getBranchCode().equals(branch)) && (action == null || action.equals(a.getAction()))) {
+            if ((a.getBranchCode() != null && a.getBranchCode().equals(branch)) 
+                    && (action == null || action.equals(a.getAction()))
+                    && !depositSlipGet(a.getRut()).isEmpty()) {
                 ua.add(a);
             }
         }
