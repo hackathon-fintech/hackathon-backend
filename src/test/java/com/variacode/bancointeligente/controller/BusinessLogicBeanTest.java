@@ -5,9 +5,13 @@
  */
 package com.variacode.bancointeligente.controller;
 
+import com.variacode.bancointeligente.core.rest.BancoInteligenteRESTException;
 import com.variacode.bancointeligente.entity.DepositSlip;
+import com.variacode.bancointeligente.entity.DepositSlipDetail;
 import com.variacode.bancointeligente.entity.UserAccount;
+import com.variacode.bancointeligente.storage.StorageBean;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
@@ -52,34 +56,39 @@ public class BusinessLogicBeanTest {
      * Test of tokenCheck method, of class BusinessLogicBean.
      */
     @Test
-    public void testTokenCheck() throws Exception {
+    public void testTokenCheck() {
         System.out.println("tokenCheck");
-        String rut = "";
-        String token = "";
-        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-        BusinessLogicBeanLocal instance = new BusinessLogicBean(new Storage);
-        instance.tokenCheck(rut, token);
-        container.close();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String rut = "19";
+        StorageBean storage = new StorageBean(DB_NAME);
+        storage.init();
+        BusinessLogicBean instance = new BusinessLogicBean(storage);
+        try {
+            instance.tokenCheck(rut, instance.login(rut, "134"));
+        } catch (BancoInteligenteRESTException e) {
+            fail(e.getMessage());
+        } finally {
+            storage.destroy();
+        }
+        assertTrue(true);
     }
 
     /**
      * Test of login method, of class BusinessLogicBean.
      */
     @Test
-    public void testLogin() throws Exception {
+    public void testLogin() {
         System.out.println("login");
         String rut = "";
         String pin = "";
-        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-        BusinessLogicBeanLocal instance = (BusinessLogicBeanLocal) container.getContext().lookup("java:global/classes/BusinessLogicBean");
-        String expResult = "";
-        String result = instance.login(rut, pin);
-        assertEquals(expResult, result);
-        container.close();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        StorageBean storage = new StorageBean(DB_NAME);
+        storage.init();
+        BusinessLogicBean instance = new BusinessLogicBean(storage);
+        try {
+            String result = instance.login(rut, pin);
+            assertTrue(result != null && !result.isEmpty());
+        } finally {
+            storage.destroy();
+        }
     }
 
     /**
@@ -96,52 +105,71 @@ public class BusinessLogicBeanTest {
      * Test of depositSlipPut method, of class BusinessLogicBean.
      */
     @Test
-    public void testDepositSlipPut() throws Exception {
+    public void testDepositSlipPut() {
         System.out.println("depositSlipPut");
-        DepositSlip depositSlip = null;
-        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-        BusinessLogicBeanLocal instance = (BusinessLogicBeanLocal) container.getContext().lookup("java:global/classes/BusinessLogicBean");
-        DepositSlip expResult = null;
-        DepositSlip result = instance.depositSlipPut(depositSlip);
-        assertEquals(expResult, result);
-        container.close();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        DepositSlip depositSlip = new DepositSlip();
+        depositSlip.setDepositId(0L);
+        depositSlip.setFromName("asdf");
+        depositSlip.setFromPhone("asdf");
+        depositSlip.setDetail(new ArrayList<DepositSlipDetail>());
+        StorageBean storage = new StorageBean(DB_NAME);
+        storage.init();
+        BusinessLogicBean instance = new BusinessLogicBean(storage);
+        try {
+            DepositSlip result = instance.depositSlipPut(depositSlip);
+            assertTrue(result.getDepositId() != null && result.getDepositId() > 0L);
+            DepositSlip result2 = instance.depositSlipPut(depositSlip);
+            assertEquals(result2, result);
+        } finally {
+            storage.destroy();
+        }
     }
 
     /**
      * Test of depositSlipGet method, of class BusinessLogicBean.
      */
     @Test
-    public void testDepositSlipGet() throws Exception {
+    public void testDepositSlipGet() {
         System.out.println("depositSlipGet");
-        String rut = "";
-        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-        BusinessLogicBeanLocal instance = (BusinessLogicBeanLocal) container.getContext().lookup("java:global/classes/BusinessLogicBean");
-        List<DepositSlip> expResult = null;
-        List<DepositSlip> result = instance.depositSlipGet(rut);
-        assertEquals(expResult, result);
-        container.close();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        DepositSlip depositSlip = new DepositSlip();
+        depositSlip.setDepositId(0L);
+        depositSlip.setUserRut("19");
+        depositSlip.setFromName("asdf");
+        depositSlip.setFromPhone("asdf");
+        StorageBean storage = new StorageBean(DB_NAME);
+        storage.init();
+        BusinessLogicBean instance = new BusinessLogicBean(storage);
+        try {
+            DepositSlip result = instance.depositSlipPut(depositSlip);
+            assertTrue(result.getDepositId() != null && result.getDepositId() > 0L);
+            List<DepositSlip> result2 = instance.depositSlipGet("19");
+            assertEquals((result2 != null && !result2.isEmpty()) ? result2.get(0) : false, result);
+        } finally {
+            storage.destroy();
+        }
     }
 
     /**
      * Test of userAccountGet method, of class BusinessLogicBean.
      */
     @Test
-    public void testUserAccountGet() throws Exception {
+    public void testUserAccountGet() {
         System.out.println("userAccountGet");
-        String branch = "";
-        String action = "";
-        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-        BusinessLogicBeanLocal instance = (BusinessLogicBeanLocal) container.getContext().lookup("java:global/classes/BusinessLogicBean");
-        List<UserAccount> expResult = null;
-        List<UserAccount> result = instance.userAccountGet(branch, action);
-        assertEquals(expResult, result);
-        container.close();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        StorageBean storage = new StorageBean(DB_NAME);
+        UserAccount ua = new UserAccount();
+        ua.setRut("19");
+        ua.setAction("TELLER");
+        ua.setBranchCode("MONEDA");
+        storage.init();
+        storage.put(UserAccount.class, ua.getRut(), ua);
+        BusinessLogicBean instance = new BusinessLogicBean(storage);
+        try {
+            List<UserAccount> ual = instance.userAccountGet("MONEDA", null);
+            assertTrue(ual != null && !ual.isEmpty());
+            assertEquals(ual.get(0), ua);
+        } finally {
+            storage.destroy();
+        }
     }
 
 }
