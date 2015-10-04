@@ -22,6 +22,10 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
 
     public BusinessLogicBean() {
     }
+    
+    public BusinessLogicBean(StorageBeanLocal storage){
+        this.storage = storage;
+    }
 
     @EJB
     private StorageBeanLocal storage;

@@ -6,7 +6,6 @@
 package com.variacode.bancointeligente.storage;
 
 import java.io.File;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
