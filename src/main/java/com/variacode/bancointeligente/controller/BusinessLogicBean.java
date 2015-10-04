@@ -66,6 +66,12 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
             if (l.getBody() == null) {
                 throw new BancoInteligenteRESTException(Response.Status.UNAUTHORIZED);
             }
+            if(user != null && user.getPhone() == null){
+                user.setPhone(l.getBody().getContacto().getCelular() != null ? l.getBody().getContacto().getCelular() : l.getBody().getContacto().getTelefono());
+            }
+            if(user != null && user.getLastName() == null){
+                user.setLastName(l.getBody().getApellidoPaterno());
+            }
             if (user == null || user.getToken() == null) {
                 user = new UserAccount();
                 user.setRut(rut);
@@ -74,7 +80,6 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
                 user.setPhotoURL("https://pbs.twimg.com/profile_images/3653841604/6a93d8d4a5b1c17fbeb1dcbaf0c9061e.jpeg");
                 user.setToken(getRandomString());
                 storage.put(UserAccount.class, rut, user);
-                
             }
         } catch (IOException | JSONException ex) {
             Logger.getLogger(BusinessLogicBean.class.getName()).log(Level.SEVERE, null, ex);

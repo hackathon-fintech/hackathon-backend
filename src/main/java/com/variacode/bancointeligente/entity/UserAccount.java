@@ -15,6 +15,8 @@ public class UserAccount implements Serializable {
     private String photoURL;
     private String account;
     private String token;
+    private String phone;
+    private String lastName;
 
     public String getRut() {
         return rut;
@@ -94,6 +96,22 @@ public class UserAccount implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
     
 }
