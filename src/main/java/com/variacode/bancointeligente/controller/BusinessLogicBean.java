@@ -2,9 +2,13 @@ package com.variacode.bancointeligente.controller;
 
 import com.variacode.bancointeligente.core.rest.BancoInteligenteRESTException;
 import com.variacode.bancointeligente.entity.DepositSlip;
+import com.variacode.bancointeligente.entity.UserAccount;
 import com.variacode.bancointeligente.storage.StorageBeanLocal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.Response;
@@ -48,11 +52,37 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
 
     @Override
     public DepositSlip depositSlipPut(DepositSlip depositSlip) {
-        if (depositSlip.getDepositId() == null) {
+        if (depositSlip.getDepositId() == null || depositSlip.getDepositId() == 0L) {
             depositSlip.setDepositId(storage.seq(DepositSlip.class.getName()));
         }
         storage.put(DepositSlip.class, depositSlip.getDepositId().toString(), depositSlip);
         return depositSlip;
+    }
+
+    @Override
+    public List<DepositSlip> depositSlipGet(String rut) {
+        //TODO: mejorar :)
+        List<DepositSlip> ds = new ArrayList<>();
+        Collection<DepositSlip> c = storage.getAll(DepositSlip.class);
+        for (DepositSlip d : c) {
+            if (d.getUserRut().equals(rut)) {
+                ds.add(d);
+            }
+        }
+        return ds;
+    }
+
+    @Override
+    public List<UserAccount> userAccountGet(String branch, String action) {
+        //TODO: mejorar :)
+        List<UserAccount> ua = new ArrayList<>();
+        Collection<UserAccount> c = storage.getAll(UserAccount.class);
+        for (UserAccount a : c) {
+            if ((a.getBranchCode() != null && a.getBranchCode().equals(branch)) && (action == null || action.equals(a.getAction()))) {
+                ua.add(a);
+            }
+        }
+        return ua;
     }
 
 }

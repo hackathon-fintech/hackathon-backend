@@ -2,14 +2,12 @@ package com.variacode.bancointeligente.core.rest;
 
 import com.variacode.bancointeligente.controller.BusinessLogicBeanLocal;
 import com.variacode.bancointeligente.entity.DepositSlip;
-import com.variacode.bancointeligente.entity.DepositSlipDetail;
 import com.variacode.bancointeligente.entity.UserAccount;
+import com.variacode.bancointeligente.storage.StorageBeanLocal;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Produces;
@@ -33,6 +31,9 @@ public class BankBranchResource extends AbstractResource {
     @EJB
     private BusinessLogicBeanLocal businessLogicBean;
     
+    @EJB
+    private StorageBeanLocal storage;
+    
     public BankBranchResource() {
     }
 
@@ -53,22 +54,7 @@ public class BankBranchResource extends AbstractResource {
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        UserAccount userAccount = new UserAccount();
-        userAccount.setFirstName("Roi");
-        userAccount.setPremium(true);
-        userAccount.setRut("1-9");
-        userAccount.setPhotoURL("http://mundoejecutivo.com.mx/sites/default/files/styles/large/public/cliente_1.jpg");
-        userAccount.setSpecialAssistance(true);
-        UserAccount userAccount2 = new UserAccount();
-        userAccount2.setFirstName("Gus");
-        userAccount2.setPremium(true);
-        userAccount2.setRut("1-9");
-        userAccount2.setPhotoURL("http://mundoejecutivo.com.mx/sites/default/files/styles/large/public/cliente_1.jpg");
-        userAccount2.setSpecialAssistance(false);
-        List<UserAccount> userAccountList = new ArrayList<>();
-        userAccountList.add(userAccount);
-        userAccountList.add(userAccount2);
-        return Response.ok(userAccountList).build();
+        return Response.ok(businessLogicBean.userAccountGet(branchName, action)).build();
     }
 
     @GET
@@ -87,35 +73,7 @@ public class BankBranchResource extends AbstractResource {
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        DepositSlip depositSlip = new DepositSlip();
-        depositSlip.setDepositId(1L);
-        depositSlip.setFromName("sdf");
-        depositSlip.setFromPhone("345345");
-        depositSlip.setStatus("NEW");
-        depositSlip.setToAccount("23452345345");
-        depositSlip.setToName("asdf");
-        List<DepositSlipDetail> detail = new ArrayList<>();
-        DepositSlipDetail detail1 = new DepositSlipDetail();
-        detail1.setAmount(20000.0);
-        detail1.setType("10000");
-        DepositSlipDetail detail2 = new DepositSlipDetail();
-        detail2.setAmount(352434.0);
-        detail2.setType("CHECK");
-        detail.add(detail1);
-        detail.add(detail2);
-        depositSlip.setDetail(detail);
-        DepositSlip depositSlip2 = new DepositSlip();
-        depositSlip2.setDepositId(1L);
-        depositSlip2.setFromName("sdf");
-        depositSlip2.setFromPhone("345345");
-        depositSlip2.setStatus("NEW");
-        depositSlip2.setToAccount("23452345345");
-        depositSlip2.setToName("asdf");
-        depositSlip2.setDetail(detail);
-        List<DepositSlip> depositSlipList = new ArrayList<>();
-        depositSlipList.add(depositSlip);
-        depositSlipList.add(depositSlip2);
-        return Response.ok(depositSlipList).build();
+        return Response.ok(businessLogicBean.depositSlipGet(rut)).build();
     }
 
     @PUT
@@ -135,6 +93,7 @@ public class BankBranchResource extends AbstractResource {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
         //TODO: login
+        depositSlip.setUserRut(rut);
         return Response.ok(businessLogicBean.depositSlipPut(depositSlip)).build();
     }
 

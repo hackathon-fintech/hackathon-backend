@@ -1,6 +1,7 @@
 
 package com.variacode.bancointeligente.storage;
 
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -15,4 +16,6 @@ public interface StorageBeanLocal {
     public <T> T get(Class<T> table, String key);
     
     public long seq(String key);
+    
+    public <T> List<T> getAll(Class<T> table);
 }

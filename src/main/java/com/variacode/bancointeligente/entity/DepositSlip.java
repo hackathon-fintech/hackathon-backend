@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class DepositSlip implements Serializable {
 
+    private String userRut;
     private Long depositId;
     private String fromName;
     private String fromPhone;
@@ -71,6 +72,14 @@ public class DepositSlip implements Serializable {
 
     public void setDetail(List<DepositSlipDetail> detail) {
         this.detail = detail;
+    }
+
+    public String getUserRut() {
+        return userRut;
+    }
+
+    public void setUserRut(String userRut) {
+        this.userRut = userRut;
     }
 
 }
