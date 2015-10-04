@@ -25,14 +25,19 @@ public class StorageBean implements StorageBeanLocal {
     private DB db;
     private static final String TABLE_PREFIX = "TABLE-";
     private static final String INCREMENTAL_PREFIX = "INCREMENTAL-";
+    private String dbFileName = "storage.db";
 
     public StorageBean() {
+    }
+
+    public StorageBean(String dbFileName) {
+        this.dbFileName = dbFileName;
     }
 
     @PostConstruct
     public void init() {
         Logger.getLogger(StorageBean.class.getName()).log(Level.INFO, "Init map storage");
-        db = DBMaker.fileDB(new File("storage.db"))
+        db = DBMaker.fileDB(new File(dbFileName))
                 .closeOnJvmShutdown()
                 .checksumEnable()
                 .cacheLRUEnable()
@@ -67,7 +72,7 @@ public class StorageBean implements StorageBeanLocal {
 
     @Override
     public <T> List<T> getAll(Class<T> table) {
-        return new ArrayList<>((Collection<T>)db.hashMap(TABLE_PREFIX + table.getName()).values());
+        return new ArrayList<>((Collection<T>) db.hashMap(TABLE_PREFIX + table.getName()).values());
     }
 
 }
