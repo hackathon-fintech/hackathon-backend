@@ -2,6 +2,7 @@ package com.variacode.bancointeligente.core.rest;
 
 import com.variacode.bancointeligente.controller.BusinessLogicBeanLocal;
 import com.variacode.bancointeligente.entity.UserAccount;
+import com.variacode.bancointeligente.entity.UserToken;
 import com.variacode.bancointeligente.storage.StorageBeanLocal;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -83,10 +84,10 @@ public class UserAccountResource extends AbstractResource {
     }
 
     @POST
-    @Produces("text/plain")
+    @Produces("application/json")
     @ApiOperation(value = "login",
             notes = "login pide rut y pin de 5 digitos",
-            response = String.class)
+            response = UserToken.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
@@ -101,7 +102,9 @@ public class UserAccountResource extends AbstractResource {
         if (token == null) {
             return responseWithBodyAndLog(Status.INTERNAL_SERVER_ERROR, "Login error");
         }
-        return Response.ok(token).build();
+        UserToken t = new UserToken();
+        t.setToken(token);
+        return Response.ok(t).build();
     }
 
 }
