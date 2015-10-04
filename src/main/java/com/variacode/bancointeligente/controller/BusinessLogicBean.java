@@ -1,17 +1,27 @@
 package com.variacode.bancointeligente.controller;
 
+import com.google.gson.Gson;
+import com.variacode.bancointeligente.apiclient.ClientLogin;
+import com.variacode.bancointeligente.apiclient.Login;
 import com.variacode.bancointeligente.core.rest.BancoInteligenteRESTException;
 import com.variacode.bancointeligente.entity.DepositSlip;
 import com.variacode.bancointeligente.entity.UserAccount;
 import com.variacode.bancointeligente.storage.StorageBeanLocal;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.Response;
+import us.monoid.json.JSONException;
+import us.monoid.json.JSONObject;
+import us.monoid.web.Resty;
+import static us.monoid.web.Resty.form;
 
 /**
  *
@@ -39,16 +49,36 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
     }
 
     @Override
-    public UserAccount login(String rut, String pin) {
-        //TODO: login
+    public UserAccount login(String rut, String pin) throws BancoInteligenteRESTException {
+        Resty r = new Resty();
+        r.withHeader("Content-Type", "application/json");
+        Gson gson = new Gson();
+        Login login = new Login();
+        login.setApiID("04_ABI");
+        login.setPassword(pin);
+        login.setRut(rut);
+        login.setTipoLogin("MOBILE");
+        String loginBody = gson.toJson(login);
         UserAccount user = storage.get(UserAccount.class, rut);
-        if (user == null) {
-            user = new UserAccount();
-            user.setRut(rut);
-        }
-        if (user.getToken() == null) {
-            user.setToken(getRandomString());
-            storage.put(UserAccount.class, rut, user);
+        try {
+            JSONObject jo = r.json("http://fintechbch:9001/BChHackatonAPI/webrest/seguridad/login", form(loginBody)).toObject();
+            ClientLogin l = gson.fromJson(jo.toString(), ClientLogin.class);
+            if (l.getBody() == null) {
+                throw new BancoInteligenteRESTException(Response.Status.UNAUTHORIZED);
+            }
+            if (user == null || user.getToken() == null) {
+                user = new UserAccount();
+                user.setRut(rut);
+                user.setFirstName(l.getBody().getNombre());
+                user.setAccount("1234567890");
+                user.setPhotoURL("https://pbs.twimg.com/profile_images/3653841604/6a93d8d4a5b1c17fbeb1dcbaf0c9061e.jpeg");
+                user.setToken(getRandomString());
+                storage.put(UserAccount.class, rut, user);
+                
+            }
+        } catch (IOException | JSONException ex) {
+            Logger.getLogger(BusinessLogicBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new BancoInteligenteRESTException(Response.Status.UNAUTHORIZED);
         }
         return storage.get(UserAccount.class, rut);
     }

@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.variacode.bancointeligente.controller;
 
-import com.variacode.bancointeligente.core.rest.BancoInteligenteRESTException;
 import com.variacode.bancointeligente.entity.DepositSlip;
 import com.variacode.bancointeligente.entity.DepositSlipDetail;
 import com.variacode.bancointeligente.entity.UserAccount;
@@ -48,45 +43,6 @@ public class BusinessLogicBeanTest {
         File dbFile = new File(DB_NAME);
         if (dbFile.exists()) {
             dbFile.delete();
-        }
-    }
-
-    /**
-     * Test of tokenCheck method, of class BusinessLogicBean.
-     */
-    @Test
-    public void testTokenCheck() {
-        System.out.println("tokenCheck");
-        String rut = "19";
-        StorageBean storage = new StorageBean(DB_NAME);
-        storage.init();
-        BusinessLogicBean instance = new BusinessLogicBean(storage);
-        try {
-            instance.tokenCheck(rut, instance.login(rut, "134").getToken());
-        } catch (BancoInteligenteRESTException e) {
-            fail(e.getMessage());
-        } finally {
-            storage.destroy();
-        }
-        assertTrue(true);
-    }
-
-    /**
-     * Test of login method, of class BusinessLogicBean.
-     */
-    @Test
-    public void testLogin() {
-        System.out.println("login");
-        String rut = "19";
-        String pin = "";
-        StorageBean storage = new StorageBean(DB_NAME);
-        storage.init();
-        BusinessLogicBean instance = new BusinessLogicBean(storage);
-        try {
-            String result = instance.login(rut, pin).getRut();
-            assertTrue(result != null && !result.isEmpty());
-        } finally {
-            storage.destroy();
         }
     }
 
