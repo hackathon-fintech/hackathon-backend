@@ -32,7 +32,7 @@ public class CORSFilter implements Filter {
                 "Access-Control-Allow-Methods", "GET, POST, DELETE, PUT"
         );
         ((HttpServletResponse) response).addHeader(
-                "Access-Control-Allow-Headers", "password,rut,body, X-Requested-With, origin, content-type, accept"
+                "Access-Control-Allow-Headers", "password,token,rut,body, X-Requested-With, origin, content-type, accept"
         );
         chain.doFilter(request, response);
     }
