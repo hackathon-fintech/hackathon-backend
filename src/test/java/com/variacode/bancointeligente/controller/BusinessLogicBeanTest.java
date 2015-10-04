@@ -91,6 +91,7 @@ public class BusinessLogicBeanTest {
         depositSlip.setUserRut("19");
         depositSlip.setFromName("asdf");
         depositSlip.setFromPhone("asdf");
+        depositSlip.setStatus("NEW");
         StorageBean storage = new StorageBean(DB_NAME);
         storage.init();
         BusinessLogicBean instance = new BusinessLogicBean(storage);
@@ -115,10 +116,17 @@ public class BusinessLogicBeanTest {
         ua.setRut("19");
         ua.setAction("TELLER");
         ua.setBranchCode("MONEDA");
+        DepositSlip depositSlip = new DepositSlip();
+        depositSlip.setDepositId(0L);
+        depositSlip.setUserRut("19");
+        depositSlip.setFromName("asdf");
+        depositSlip.setFromPhone("asdf");
+        depositSlip.setStatus("NEW");
         storage.init();
         storage.put(UserAccount.class, ua.getRut(), ua);
         BusinessLogicBean instance = new BusinessLogicBean(storage);
         try {
+            instance.depositSlipPut(depositSlip);
             List<UserAccount> ual = instance.userAccountGet("MONEDA", null);
             assertTrue(ual != null && !ual.isEmpty());
             assertEquals(ual.get(0), ua);

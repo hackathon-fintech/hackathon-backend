@@ -111,8 +111,8 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
         for (DepositSlip d : c) {
             if (d.getUserRut().equals(rut)
                     && d.getStatus() != null
-                    && d.getStatus().equals("NEW")
-                    && d.getStatus().equals("DONE")) {
+                    && (d.getStatus().equals("NEW")
+                    || d.getStatus().equals("DONE"))) {
                 ds.add(d);
             }
         }
