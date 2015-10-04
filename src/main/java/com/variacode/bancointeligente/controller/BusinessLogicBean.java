@@ -93,6 +93,7 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
     public DepositSlip depositSlipPut(DepositSlip depositSlip) {
         if (depositSlip.getDepositId() == null || depositSlip.getDepositId() == 0L) {
             depositSlip.setDepositId(storage.seq(DepositSlip.class.getName()));
+            depositSlip.setStatus("NEW");
         }
         storage.put(DepositSlip.class, depositSlip.getDepositId().toString(), depositSlip);
         return depositSlip;
