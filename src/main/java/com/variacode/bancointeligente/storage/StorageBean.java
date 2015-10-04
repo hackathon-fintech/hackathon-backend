@@ -48,4 +48,9 @@ public class StorageBean implements StorageBeanLocal {
         return (T) db.hashMap(table.getName()).get(key);
     }
     
+    @Override
+    public long seq(String key){
+        return db.atomicLong(key).incrementAndGet();
+    }
+    
 }

@@ -13,6 +13,7 @@ public class UserAccount implements Serializable {
     private String branchStatus;
     private String action;
     private String photoURL;
+    private String account;
 
     public String getRut() {
         return rut;
@@ -76,6 +77,14 @@ public class UserAccount implements Serializable {
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
     
 }

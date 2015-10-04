@@ -1,6 +1,7 @@
 package com.variacode.bancointeligente.controller;
 
 import com.variacode.bancointeligente.core.rest.BancoInteligenteRESTException;
+import com.variacode.bancointeligente.entity.DepositSlip;
 import com.variacode.bancointeligente.storage.StorageBeanLocal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -44,6 +45,14 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
     public static String getRandomString() {
         return new BigInteger(130, random).toString(32);
     }
-    
-    
+
+    @Override
+    public DepositSlip depositSlipPut(DepositSlip depositSlip) {
+        if (depositSlip.getDepositId() == null) {
+            depositSlip.setDepositId(storage.seq(DepositSlip.class.getName()));
+        }
+        storage.put(DepositSlip.class, depositSlip.getDepositId().toString(), depositSlip);
+        return depositSlip;
+    }
+
 }

@@ -13,4 +13,6 @@ public interface StorageBeanLocal {
     public void put(Class table, String key, Object value);
     
     public <T> T get(Class<T> table, String key);
+    
+    public long seq(String key);
 }

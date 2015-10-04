@@ -1,5 +1,6 @@
 package com.variacode.bancointeligente.core.rest;
 
+import com.variacode.bancointeligente.controller.BusinessLogicBeanLocal;
 import com.variacode.bancointeligente.entity.DepositSlip;
 import com.variacode.bancointeligente.entity.DepositSlipDetail;
 import com.variacode.bancointeligente.entity.UserAccount;
@@ -9,6 +10,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -22,10 +25,14 @@ import javax.ws.rs.core.Response;
  *
  * @author miguel@variacode.com
  */
+@Stateless
 @Path("branch")
 @Api(value = "/branch", description = "Sucursal API")
 public class BankBranchResource extends AbstractResource {
 
+    @EJB
+    private BusinessLogicBeanLocal businessLogicBean;
+    
     public BankBranchResource() {
     }
 
@@ -127,8 +134,8 @@ public class BankBranchResource extends AbstractResource {
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        
-        return Response.ok(depositSlip).build();
+        //TODO: login
+        return Response.ok(businessLogicBean.depositSlipPut(depositSlip)).build();
     }
 
 }
