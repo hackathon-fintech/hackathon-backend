@@ -1,6 +1,7 @@
 package com.variacode.bancointeligente.core.rest;
 
 import com.variacode.bancointeligente.entity.DepositSlip;
+import com.variacode.bancointeligente.entity.DepositSlipDetail;
 import com.variacode.bancointeligente.entity.UserAccount;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -86,11 +87,11 @@ public class BankBranchResource extends AbstractResource {
         depositSlip.setStatus("NEW");
         depositSlip.setToAccount("23452345345");
         depositSlip.setToName("asdf");
-        List<DepositSlip.DepositSlipDetail> detail = new ArrayList<>();
-        DepositSlip.DepositSlipDetail detail1 = new DepositSlip.DepositSlipDetail();
+        List<DepositSlipDetail> detail = new ArrayList<>();
+        DepositSlipDetail detail1 = new DepositSlipDetail();
         detail1.setAmount(20000.0);
         detail1.setType("10000");
-        DepositSlip.DepositSlipDetail detail2 = new DepositSlip.DepositSlipDetail();
+        DepositSlipDetail detail2 = new DepositSlipDetail();
         detail2.setAmount(352434.0);
         detail2.setType("CHECK");
         detail.add(detail1);
@@ -126,6 +127,7 @@ public class BankBranchResource extends AbstractResource {
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
+        
         return Response.ok(depositSlip).build();
     }
 

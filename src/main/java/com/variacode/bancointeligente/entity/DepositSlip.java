@@ -17,28 +17,6 @@ public class DepositSlip implements Serializable {
     private String status;
     private List<DepositSlipDetail> detail;
 
-    public static class DepositSlipDetail implements Serializable {
-        private String type;
-        private Double amount;
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public Double getAmount() {
-            return amount;
-        }
-
-        public void setAmount(Double amount) {
-            this.amount = amount;
-        }
-        
-    }
-    
     public Long getDepositId() {
         return depositId;
     }
