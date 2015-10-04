@@ -14,6 +14,7 @@ public class UserAccount implements Serializable {
     private String action;
     private String photoURL;
     private String account;
+    private String token;
 
     public String getRut() {
         return rut;
@@ -85,6 +86,14 @@ public class UserAccount implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
     
 }

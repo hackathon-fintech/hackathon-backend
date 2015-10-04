@@ -22,8 +22,8 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
 
     public BusinessLogicBean() {
     }
-    
-    public BusinessLogicBean(StorageBeanLocal storage){
+
+    public BusinessLogicBean(StorageBeanLocal storage) {
         this.storage = storage;
     }
 
@@ -32,20 +32,25 @@ public class BusinessLogicBean implements BusinessLogicBeanLocal {
 
     @Override
     public void tokenCheck(String rut, String token) throws BancoInteligenteRESTException {
-        String t = storage.get(String.class, rut);
-        if (t == null || !t.equals(token)) {
+        UserAccount t = storage.get(UserAccount.class, rut);
+        if (t == null || t.getToken() == null || !t.getToken().equals(token)) {
             throw new BancoInteligenteRESTException(Response.Status.UNAUTHORIZED);
         }
     }
 
     @Override
-    public String login(String rut, String pin) {
+    public UserAccount login(String rut, String pin) {
         //TODO: login
-        String token = storage.get(String.class, rut);
-        if (token == null) {
-            storage.put(String.class, rut, getRandomString());
+        UserAccount user = storage.get(UserAccount.class, rut);
+        if (user == null) {
+            user = new UserAccount();
+            user.setRut(rut);
         }
-        return storage.get(String.class, rut);
+        if (user.getToken() == null) {
+            user.setToken(getRandomString());
+            storage.put(UserAccount.class, rut, user);
+        }
+        return storage.get(UserAccount.class, rut);
     }
 
     private static final SecureRandom random = new SecureRandom();

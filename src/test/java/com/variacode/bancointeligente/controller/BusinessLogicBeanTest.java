@@ -13,7 +13,6 @@ import com.variacode.bancointeligente.storage.StorageBean;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -63,7 +62,7 @@ public class BusinessLogicBeanTest {
         storage.init();
         BusinessLogicBean instance = new BusinessLogicBean(storage);
         try {
-            instance.tokenCheck(rut, instance.login(rut, "134"));
+            instance.tokenCheck(rut, instance.login(rut, "134").getToken());
         } catch (BancoInteligenteRESTException e) {
             fail(e.getMessage());
         } finally {
@@ -78,13 +77,13 @@ public class BusinessLogicBeanTest {
     @Test
     public void testLogin() {
         System.out.println("login");
-        String rut = "";
+        String rut = "19";
         String pin = "";
         StorageBean storage = new StorageBean(DB_NAME);
         storage.init();
         BusinessLogicBean instance = new BusinessLogicBean(storage);
         try {
-            String result = instance.login(rut, pin);
+            String result = instance.login(rut, pin).getRut();
             assertTrue(result != null && !result.isEmpty());
         } finally {
             storage.destroy();

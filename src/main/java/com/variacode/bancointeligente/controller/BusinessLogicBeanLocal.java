@@ -13,7 +13,7 @@ import javax.ejb.Local;
 @Local
 public interface BusinessLogicBeanLocal {
 
-    public String login(String rut, String pin);
+    public UserAccount login(String rut, String pin);
     
     public void tokenCheck(String rut, String token) throws BancoInteligenteRESTException;
     

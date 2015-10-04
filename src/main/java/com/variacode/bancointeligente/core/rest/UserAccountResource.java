@@ -2,7 +2,6 @@ package com.variacode.bancointeligente.core.rest;
 
 import com.variacode.bancointeligente.controller.BusinessLogicBeanLocal;
 import com.variacode.bancointeligente.entity.UserAccount;
-import com.variacode.bancointeligente.entity.UserToken;
 import com.variacode.bancointeligente.storage.StorageBeanLocal;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -79,6 +78,7 @@ public class UserAccountResource extends AbstractResource {
         }
         //TODO: login
         //TODO: autoriacion
+        userAccount.setToken(storage.get(UserAccount.class, userAccount.getRut()).getToken());
         storage.put(UserAccount.class, userAccount.getRut(), userAccount);
         return Response.ok(userAccount).build();
     }
@@ -87,24 +87,22 @@ public class UserAccountResource extends AbstractResource {
     @Produces("application/json")
     @ApiOperation(value = "login",
             notes = "login pide rut y pin de 5 digitos",
-            response = UserToken.class)
+            response = UserAccount.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
     public Response login(@HeaderParam("rut") String rut, @HeaderParam("pin") String pin) {
-        String token;
+        UserAccount account;
         try {
             checkNullsOrEmptyString(rut, pin);
-            token = businessLogicBean.login(rut, pin);
+            account = businessLogicBean.login(rut, pin);
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        if (token == null) {
+        if (account == null) {
             return responseWithBodyAndLog(Status.INTERNAL_SERVER_ERROR, "Login error");
         }
-        UserToken t = new UserToken();
-        t.setToken(token);
-        return Response.ok(t).build();
+        return Response.ok(account).build();
     }
 
 }
