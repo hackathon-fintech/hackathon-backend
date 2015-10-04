@@ -30,7 +30,7 @@ public class UserAccountResource extends AbstractResource {
 
     @EJB
     private BusinessLogicBeanLocal businessLogicBean;
-    
+
     @EJB
     private StorageBeanLocal storage;
 
@@ -45,15 +45,15 @@ public class UserAccountResource extends AbstractResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
-    public Response getJson(@HeaderParam("rut") String rut) {
+    public Response getJson(@HeaderParam("token") String token, @HeaderParam("rut") String rut) {
         try {
             checkNullsOrEmptyString(rut);
+            auth(token, storage.get(UserAccount.class, rut));
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        //TODO: login
         UserAccount userAccount = storage.get(UserAccount.class, rut);
-        if(userAccount == null){
+        if (userAccount == null) {
             return responseWithBodyAndLog(Status.BAD_REQUEST, "User doesn't exist");
         }
         return Response.ok(userAccount).build();
@@ -69,15 +69,14 @@ public class UserAccountResource extends AbstractResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
-    public Response putJson(UserAccount userAccount) {
+    public Response putJson(@HeaderParam("token") String token, UserAccount userAccount) {
         try {
             checkNullsOrEmptyString(userAccount);
             checkNullsOrEmptyString(userAccount.getRut());
+            auth(token, storage.get(UserAccount.class, userAccount.getRut()));
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        //TODO: login
-        //TODO: autoriacion
         userAccount.setToken(storage.get(UserAccount.class, userAccount.getRut()).getToken());
         storage.put(UserAccount.class, userAccount.getRut(), userAccount);
         return Response.ok(userAccount).build();

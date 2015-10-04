@@ -30,10 +30,10 @@ public class BankBranchResource extends AbstractResource {
 
     @EJB
     private BusinessLogicBeanLocal businessLogicBean;
-    
+
     @EJB
     private StorageBeanLocal storage;
-    
+
     public BankBranchResource() {
     }
 
@@ -42,15 +42,17 @@ public class BankBranchResource extends AbstractResource {
     @Produces("application/json")
     @ApiOperation(value = "usuarios en una sucursal con una accion especifica",
             notes = "branchName=MONEDA, "
-                    + "action=TELLER,INFORMATION,EXECUTIVE",
+            + "action=TELLER,INFORMATION,EXECUTIVE",
             response = UserAccount.class,
             responseContainer = "List")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
-    public Response getJsonAll(@QueryParam("branchName") String branchName, @QueryParam("action") String action) {
+    public Response getJsonAll(@HeaderParam("token") String token,
+            @QueryParam("branchName") String branchName, @QueryParam("action") String action) {
         try {
             checkNullsOrEmptyString(branchName);
+            auth(token, storage.get(UserAccount.class, null));
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
@@ -67,9 +69,10 @@ public class BankBranchResource extends AbstractResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
-    public Response getJson(@HeaderParam("rut") String rut) {
+    public Response getJson(@HeaderParam("token") String token, @HeaderParam("rut") String rut) {
         try {
             checkNullsOrEmptyString(rut);
+            auth(token, storage.get(UserAccount.class, rut));
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
@@ -86,13 +89,13 @@ public class BankBranchResource extends AbstractResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid something")})
-    public Response putJson(@HeaderParam("rut") String rut, DepositSlip depositSlip) {
+    public Response putJson(@HeaderParam("token") String token, @HeaderParam("rut") String rut, DepositSlip depositSlip) {
         try {
             checkNullsOrEmptyString(depositSlip, rut);
+            auth(token, storage.get(UserAccount.class, rut));
         } catch (BancoInteligenteRESTException ex) {
             return responseWithBodyAndLog(ex.getStatus(), ex.getMessage());
         }
-        //TODO: login
         depositSlip.setUserRut(rut);
         return Response.ok(businessLogicBean.depositSlipPut(depositSlip)).build();
     }
